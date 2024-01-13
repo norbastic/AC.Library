@@ -18,10 +18,14 @@ public class Scanner
         _logger = logger;
     }
     
-    public async Task<List<AirConditionerModel>> Scan(string broadcastAddresses)
+    /// <summary>
+    /// Scans the local network for available AC device(s)
+    /// </summary>
+    /// <param name="broadcastAddresses">Broadcast address of the network. E.g. 192.168.0.255</param>
+    /// <returns>A list of ScannedDevice object</returns>
+    public async Task<List<ScannedDevice>> Scan(string broadcastAddresses)
     {
-        var foundUnits = new List<AirConditionerModel>();
-
+        var foundUnits = new List<ScannedDevice>();
         var responses = await DiscoverLocalDevices(broadcastAddresses);
 
         foreach (var response in responses)
@@ -52,13 +56,13 @@ public class Scanner
             }
 
             var deviceInfo = JsonSerializer.Deserialize<DeviceInfoResponsePack>(decryptedPack);
-            
-            _logger.LogInformation($"Found: " +
-                $"ClientId={deviceInfo?.ClientId}, " +
-                $"FirmwareVersion={deviceInfo?.FirmwareVersion}, " +
-                $"Name={deviceInfo?.FriendlyName}, " +
-                $"Address={response.Address}");
-
+            foundUnits.Add(new ScannedDevice
+            {
+                Id = deviceInfo?.ClientId,
+                Name = deviceInfo?.FriendlyName,
+                Address = response.Address,
+                Type = deviceInfo?.Model
+            });
         }
         
         return foundUnits;

@@ -71,6 +71,12 @@ public class Binder {
         return await WaitForUdp(udp, ipAddress);
     }
     
+    /// <summary>
+    /// It binds one AC device to the current machine
+    /// </summary>
+    /// <param name="macAddress">MAC address of the device</param>
+    /// <param name="ipAddress">IP address of the device</param>
+    /// <returns>Returns with the [key] if successful, otherwise null</returns>
     public async Task<string?> BindOne(string macAddress, string ipAddress)
     {
         var bindRequestPack = new BindRequestPack() { MAC = macAddress };
