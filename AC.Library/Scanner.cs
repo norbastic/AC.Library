@@ -48,6 +48,10 @@ public class Scanner
             }
 
             var decryptedPack = Crypto.DecryptGenericData(responsePackInfo.Pack);
+            if (decryptedPack == null)
+            {
+                continue;
+            }
             var packInfo = JsonSerializer.Deserialize<PackInfo>(decryptedPack);
             
             if (packInfo?.Type != "dev")

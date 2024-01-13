@@ -48,7 +48,14 @@ public class Binder {
             {
                 continue;
             }
-            var bindResponse = JsonSerializer.Deserialize<BindResponsePack>(Crypto.DecryptGenericData(responsePackInfo.Pack));
+
+            var decryptedData = Crypto.DecryptGenericData(responsePackInfo.Pack);
+            if (decryptedData == null)
+            {
+                return null;
+            }
+            
+            var bindResponse = JsonSerializer.Deserialize<BindResponsePack>(decryptedData);
             key = bindResponse?.Key;
         }
 
@@ -80,7 +87,12 @@ public class Binder {
     public async Task<string?> BindOne(string macAddress, string ipAddress)
     {
         var bindRequestPack = new BindRequestPack() { MAC = macAddress };
-        var request = Request.Create(macAddress, Crypto.EncryptGenericData(JsonSerializer.Serialize(bindRequestPack)), 1);
+        var encryptedData = Crypto.EncryptGenericData(JsonSerializer.Serialize(bindRequestPack));
+        if (encryptedData == null)
+        {
+            return null;
+        }
+        var request = Request.Create(macAddress, encryptedData, 1);
         var requestJson = JsonSerializer.Serialize(request);
         var datagram = Encoding.ASCII.GetBytes(requestJson);
         var key = await SendUdpRequest(datagram, ipAddress);

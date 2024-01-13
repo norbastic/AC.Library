@@ -54,12 +54,12 @@ internal static class Crypto
             (byte)88
     };
 
-    public static string EncryptGenericData(string input)
+    public static string? EncryptGenericData(string input)
     {
         return EncryptData(input, GenericKey);
     }
 
-    public static string EncryptData(string input, string key)
+    public static string? EncryptData(string input, string key)
     {
         try
         {
@@ -76,12 +76,12 @@ internal static class Crypto
         }
     }
 
-    public static string DecryptGenericData(string input)
+    public static string? DecryptGenericData(string input)
     {
         return DecryptData(input, GenericKey);
     }
 
-    public static string DecryptData(string input, string key)
+    public static string? DecryptData(string input, string key)
     {
         try
         {
@@ -98,7 +98,7 @@ internal static class Crypto
         }
     }
 
-    public static string DecryptCbcData(string input)
+    public static string? DecryptCbcData(string input)
     {
         try
         {
