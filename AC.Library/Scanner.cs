@@ -1,4 +1,6 @@
-﻿namespace AC.Library;
+﻿using AC.Library.Interfaces;
+
+namespace AC.Library;
 
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -12,10 +14,12 @@ using Utils;
 public class Scanner
 {
     private readonly ILogger _logger;
-    
-    public Scanner(ILogger<Scanner> logger)
+    private readonly IUdpClientWrapper _udpClientWrapper;
+
+    public Scanner(ILogger<Scanner> logger, IUdpClientWrapper udpClientWrapper)
     {
         _logger = logger;
+        _udpClientWrapper = udpClientWrapper;
     }
     
     /// <summary>
@@ -76,7 +80,7 @@ public class Scanner
     {
         var responses = new List<DeviceDiscoveryResponse>();
 
-        using var udp = new UdpClient();
+        using var udp = _udpClientWrapper;
         udp.EnableBroadcast = true;
         
         _logger.LogDebug("Sending scan packet");
