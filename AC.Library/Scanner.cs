@@ -55,16 +55,7 @@ public class Scanner
             }
             
             var responsePackInfo = JsonSerializer.Deserialize<ResponsePackInfo>(response.Json);
-           
-            if (responsePackInfo?.Type != "pack")
-            {
-                continue;
-            }
-            
-            if (responsePackInfo.Pack == null)
-            {
-                continue;
-            }
+            if (!ResponseChecker.IsReponsePackInfoValid(responsePackInfo)) continue;
 
             var decryptedPack = Crypto.DecryptGenericData(responsePackInfo.Pack);
             if (decryptedPack == null)

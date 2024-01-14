@@ -25,7 +25,7 @@ public class UdpHandler
     private async Task<List<UdpReceiveResult>> WaitForUdpResponse(IUdpClientWrapper udp, string ipAddress, int timeOut)
     {
         var responses = new List<UdpReceiveResult>();
-        var loopMax = timeOut / 10;
+        var loopMax = timeOut / 100;
 
         for (int i = 0; i < loopMax; i++)
         {

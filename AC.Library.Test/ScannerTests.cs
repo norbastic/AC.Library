@@ -29,6 +29,8 @@ public class ScannerTests
         mock.SetupSequence(x => x.Available)
             .Returns(1)
             .Returns(0);
+        mock.Setup(x => x.EnableBroadcast)
+            .Returns(true);
         mock.Setup(x => x.ReceiveAsync())
             .ReturnsAsync(new UdpReceiveResult(
                 Convert.FromBase64String(UdpBase64Buffer),
