@@ -1,15 +1,13 @@
-﻿using AC.Library.Interfaces;
-
-namespace AC.Library;
+﻿namespace AC.Library;
 
 using System.Collections.Generic;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using Models;
 using Utils;
+using Interfaces;
 
 public class Scanner
 {
@@ -20,6 +18,23 @@ public class Scanner
     {
         _logger = logger;
         _udpClientWrapper = udpClientWrapper;
+    }
+    
+    private async Task<List<DeviceDiscoveryResponse>> DiscoverLocalDevices(string broadcastAddress)
+    { 
+        var udpHandler = new UdpHandler(_udpClientWrapper);
+        var bytes = Encoding.ASCII.GetBytes("{ \"t\": \"scan\" }");
+
+        var result = await udpHandler.SendReceiveBroadcastRequest(bytes, broadcastAddress);
+        var responses = result
+            .Select(x => new DeviceDiscoveryResponse
+            {
+                Json = Encoding.ASCII.GetString(x.Buffer),
+                Address = x.RemoteEndPoint.Address.ToString()
+            })
+            .ToList();
+        
+        return responses;
     }
     
     /// <summary>
@@ -74,38 +89,5 @@ public class Scanner
         }
         
         return foundUnits;
-    }
-
-    private async Task<List<DeviceDiscoveryResponse>> DiscoverLocalDevices(string broadcastAddress)
-    {
-        var responses = new List<DeviceDiscoveryResponse>();
-
-        using var udp = _udpClientWrapper;
-        udp.EnableBroadcast = true;
-        
-        _logger.LogDebug("Sending scan packet");
-
-        var bytes = Encoding.ASCII.GetBytes("{ \"t\": \"scan\" }");
-        var sent = await udp.SendAsync(bytes, bytes.Length, broadcastAddress, 7000);
-
-        _logger.LogDebug($"Sent bytes: {sent}");
-
-        for (int i = 0; i < 20; ++i)
-        {
-            if (udp.Available > 0)
-            {
-                var result = await udp.ReceiveAsync();
-                responses.Add(new DeviceDiscoveryResponse()
-                {
-                    Json = Encoding.ASCII.GetString(result.Buffer),
-                    Address = result.RemoteEndPoint.Address.ToString()
-                });
-
-                _logger.LogDebug($"Got response from {result.RemoteEndPoint.Address}");
-            }
-            await Task.Delay(100);
-        }
-        
-        return responses;
     }
 }

@@ -1,81 +1,37 @@
 namespace AC.Library;
 
-using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using System.Net.Sockets;
 using Utils;
 using Models;
+using Interfaces;
 
 public class Binder {
-    
     private readonly ILogger<Binder> _logger;
-    
-    public Binder(ILogger<Binder> logger)
+    private readonly IUdpClientWrapper _udpClientWrapper;
+
+    public Binder(ILogger<Binder> logger, IUdpClientWrapper udpClientWrapper)
     {
         _logger = logger;
+        _udpClientWrapper = udpClientWrapper;
     }
 
-    private async Task<string?> WaitForUdp(UdpClient udp, string ipAddress)
+    private string? GetKeyFromUdpResponse(UdpReceiveResult udpReceiveResult)
     {
-        string? key = null;
+        var responseJson = Encoding.ASCII.GetString(udpReceiveResult.Buffer);
+        var responsePackInfo = JsonSerializer.Deserialize<ResponsePackInfo>(responseJson);
+        if (!ResponseChecker.IsReponsePackInfoValid(responsePackInfo)) return null;
         
-        for (int i = 0; i < 50; ++i)
+        var decryptedData = Crypto.DecryptGenericData(responsePackInfo.Pack);
+        if (decryptedData == null)
         {
-            if (udp.Available == 0)
-            {
-                await Task.Delay(100);
-                continue;
-            }
-
-            var result = await udp.ReceiveAsync();
-            if (result.RemoteEndPoint.Address.ToString() != ipAddress)
-            {
-                _logger.LogWarning($"Got binding response from the wrong device: {result.RemoteEndPoint.Address}");
-                continue;
-            }
-            var responseJson = Encoding.ASCII.GetString(result.Buffer);
-            var responsePackInfo = JsonSerializer.Deserialize<ResponsePackInfo>(responseJson);
-            if (responsePackInfo == null)
-            {
-                continue;
-            }
-            if (responsePackInfo.Type != "pack")
-            {
-                continue;
-            }
-            if (responsePackInfo.Pack == null)
-            {
-                continue;
-            }
-
-            var decryptedData = Crypto.DecryptGenericData(responsePackInfo.Pack);
-            if (decryptedData == null)
-            {
-                return null;
-            }
+            return null;
+        }
             
-            var bindResponse = JsonSerializer.Deserialize<BindResponsePack>(decryptedData);
-            key = bindResponse?.Key;
-        }
-
-        return key;
-    }
-
-    private async Task<string?> SendUdpRequest(byte[] datagram, string ipAddress)
-    {
-        string? key = null;
-        
-        using var udp = new UdpClient();
-        var sent = await udp.SendAsync(datagram, datagram.Length, ipAddress, 7000);
-
-        if (sent != datagram.Length)
-        {
-            _logger.LogWarning("Binding request cannot be sent");
-            return key;
-        }
-        
-        return await WaitForUdp(udp, ipAddress);
+        var bindResponse = JsonSerializer.Deserialize<BindResponsePack>(decryptedData);
+        return bindResponse?.Key;
     }
     
     /// <summary>
@@ -95,9 +51,11 @@ public class Binder {
         var request = Request.Create(macAddress, encryptedData, 1);
         var requestJson = JsonSerializer.Serialize(request);
         var datagram = Encoding.ASCII.GetBytes(requestJson);
-        var key = await SendUdpRequest(datagram, ipAddress);
+        var udpHandler = new UdpHandler(_udpClientWrapper);
+        var udpResponse = (await udpHandler.SendReceiveRequest(datagram, ipAddress, 5000))
+            .FirstOrDefault();
+        var key = GetKeyFromUdpResponse(udpResponse);
         _logger.LogDebug($"Success. Key: {key}");
-
         return key;
     }
 }
