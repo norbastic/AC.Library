@@ -48,8 +48,8 @@ public class UdpHandler
     
     public async Task<List<UdpReceiveResult>> SendReceiveBroadcastRequest(byte[] bytes, string ipAddress, int timeOut = 2000)
     {
-        _udpClientWrapper.EnableBroadcast = true;
         using var udp = _udpClientWrapper;
+        udp.EnableBroadcast = true;
         await udp.SendAsync(bytes, bytes.Length, ipAddress, 7000);
         
         return await WaitForUdpResponse(udp, ipAddress, timeOut);
