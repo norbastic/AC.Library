@@ -23,7 +23,7 @@ public class ScannerTests
     }
     
     [Fact]
-    public async void Test1()
+    public async void ScanSuccessful()
     {
         var mock = new Mock<IUdpClientWrapper>();
         mock.SetupSequence(x => x.Available)
