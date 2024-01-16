@@ -22,9 +22,9 @@ public class Binder {
     {
         var responseJson = Encoding.ASCII.GetString(udpReceiveResult.Buffer);
         var responsePackInfo = JsonSerializer.Deserialize<ResponsePackInfo>(responseJson);
-        if (!ResponseChecker.IsReponsePackInfoValid(responsePackInfo)) return null;
+        if (!ResponseChecker.IsReponsePackInfoValid(responsePackInfo!)) return null;
         
-        var decryptedData = Crypto.DecryptGenericData(responsePackInfo.Pack);
+        var decryptedData = Crypto.DecryptGenericData(responsePackInfo!.Pack);
         if (decryptedData == null)
         {
             return null;

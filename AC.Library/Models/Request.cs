@@ -8,13 +8,13 @@ internal class Request : PackInfo
     public int I { get; set; }
 
     [JsonPropertyName("tcid")]
-    public string? TargetClientId { get; set; }
+    public string TargetClientId { get; set; } = string.Empty;
 
     [JsonPropertyName("uid")]
     public int UID { get; set; }
 
     [JsonPropertyName("pack")]
-    public string? Pack { get; set; }
+    public string Pack { get; set; } = string.Empty;
 
     public static Request Create(string targetClientId, string pack, int i = 0)
     {

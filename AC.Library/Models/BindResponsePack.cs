@@ -4,8 +4,8 @@ using System.Text.Json.Serialization;
 public class BindResponsePack
 {
     [JsonPropertyName("mac")]
-    public string? MAC { get; set; }
+    public string MAC { get; set; } = string.Empty;
 
     [JsonPropertyName("key")]
-    public string? Key { get; set; }
+    public string Key { get; set; } = string.Empty;
 }

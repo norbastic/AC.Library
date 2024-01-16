@@ -4,7 +4,7 @@ namespace AC.Library.Utils;
 
 internal static class ResponseChecker
 {
-    internal static bool IsReponsePackInfoValid(ResponsePackInfo? responsePackInfo)
+    internal static bool IsReponsePackInfoValid(ResponsePackInfo responsePackInfo)
     {
         if (responsePackInfo == null)
         {

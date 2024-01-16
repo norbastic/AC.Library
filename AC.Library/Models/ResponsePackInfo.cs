@@ -5,10 +5,10 @@ using System.Text.Json.Serialization;
 internal class PackInfo
 {
     [JsonPropertyName("t")]
-    public string? Type { get; set; }
+    public string Type { get; set; } = string.Empty;
 
     [JsonPropertyName("cid")]
-    public string? ClientId { get; set; }
+    public string ClientId { get; set; } = string.Empty;
 }
 
 internal class ResponsePackInfo : PackInfo
@@ -18,8 +18,8 @@ internal class ResponsePackInfo : PackInfo
     public int? UID { get; set; }
 
     [JsonPropertyName("tcid")]
-    public string? TargetClientId { get; set; }
+    public string TargetClientId { get; set; } = string.Empty;
 
     [JsonPropertyName("pack")]
-    public string? Pack { get; set; }
+    public string Pack { get; set; } = string.Empty;
 }
