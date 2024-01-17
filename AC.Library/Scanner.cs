@@ -49,33 +49,38 @@ public class Scanner
 
         foreach (var response in responses)
         {
-            if (response.Json == null)
+            if (response?.Json == null)
             {
                 continue;
             }
             
             var responsePackInfo = JsonSerializer.Deserialize<ResponsePackInfo>(response.Json);
-            if (!ResponseChecker.IsReponsePackInfoValid(responsePackInfo)) continue;
+            if (!ResponseChecker.IsReponsePackInfoValid(responsePackInfo!)) continue;
 
-            var decryptedPack = Crypto.DecryptGenericData(responsePackInfo.Pack);
+            var decryptedPack = Crypto.DecryptGenericData(responsePackInfo!.Pack);
             if (decryptedPack == null)
             {
                 continue;
             }
-            var packInfo = JsonSerializer.Deserialize<PackInfo>(decryptedPack);
             
+            var packInfo = JsonSerializer.Deserialize<PackInfo>(decryptedPack);
             if (packInfo?.Type != "dev")
             {
                 continue;
             }
 
             var deviceInfo = JsonSerializer.Deserialize<DeviceInfoResponsePack>(decryptedPack);
+            if (deviceInfo == null)
+            {
+                continue;
+            }
+            
             foundUnits.Add(new ScannedDevice
             {
-                Id = deviceInfo?.ClientId,
-                Name = deviceInfo?.FriendlyName,
+                Id = deviceInfo.ClientId,
+                Name = deviceInfo.FriendlyName,
                 Address = response.Address,
-                Type = deviceInfo?.Model
+                Type = deviceInfo.Model
             });
         }
         
