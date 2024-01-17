@@ -34,14 +34,14 @@ public class DeviceController
 
         return JsonSerializer.Deserialize<CommandResponsePack>(decryptedJson);
     }
-
-    public async Task<bool> SetDeviceParameter(Dictionary<string, int> parameters)
+    
+    private async Task<bool> SetDeviceParameter(string param, int value)
     {
         if (_airConditionerModel.PrivateKey == null)
         {
             throw new Exception("Device [PrivateKey] is required!");
         }
-        var pack = CommandRequestPack.Create(_airConditionerModel.Id, parameters);
+        var pack = CommandRequestPack.Create(_airConditionerModel.Id, param, value);
         var packJson = JsonSerializer.Serialize(pack);
         var encryptedData = Crypto.EncryptData(packJson, _airConditionerModel.PrivateKey) ?? throw new Exception("Could not encrypt pack json.");
         
@@ -55,11 +55,20 @@ public class DeviceController
             return false;
         }
 
-        if (parameters.ContainsKey(commandResponse.Columns.First()))
+        if (param.Equals(commandResponse.Columns.First()))
         {
             return true;
         }
 
         return false;
+    }
+    
+    public async Task<bool> SetDeviceParameter<TParam, TValue>(Dictionary<TParam, TValue> param) where TParam : StringEnum
+    {
+        var entry = param.FirstOrDefault();
+        var key = entry.Key.Value;
+        var value = Convert.ToInt32(entry.Value);
+
+        return await SetDeviceParameter(key, value);
     }
 }

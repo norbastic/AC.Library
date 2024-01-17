@@ -21,5 +21,17 @@ internal class CommandRequestPack : RequestPackInfo
             UID = null
         };
     }
+    
+    public static CommandRequestPack Create(string clientId, string param, int value)
+    {
+        return new CommandRequestPack()
+        {
+            Type = "cmd",
+            MAC = clientId,
+            Columns = new List<string>{param},
+            Values = new List<int>{value},
+            UID = null
+        };
+    }
 
 }

@@ -5,7 +5,7 @@ public enum PowerValues {
     On = 1
 }
 
-public enum ModeParameter {
+public enum ModeValues {
     Auto = 0,
     Cool = 1,
     Dry = 2,
@@ -13,12 +13,12 @@ public enum ModeParameter {
     Heat = 4
 }
 
-public enum TempUnitParameter {
+public enum TempUnitValues {
     Celsius = 0,
     Fahrenheit = 1
 }
 
-public enum FanSpeedParameter {
+public enum FanSpeedValues {
     Auto = 0,
     Low = 1,
     MediumLow = 2,
@@ -27,29 +27,29 @@ public enum FanSpeedParameter {
     High = 5
 }
 
-public enum AirParameter {
+public enum AirValues {
     Off = 0,
     Inside = 1,
     Outside = 2,
     Mode3 = 3
 }
 
-public enum HealthParameter {
+public enum HealthValues {
     Off = 0,
     On = 1,
 }
 
-public enum SleepParameter {
+public enum SleepValues {
     Off = 0,
     On = 1,
 }
 
-public enum LightsParameter {
+public enum LightsValues {
     Off = 0,
     On = 1,
 }
 
-public enum SwingHorizontalParameter {
+public enum SwingHorizontalValues {
     Default = 0,
     Full = 1,
     FixedLeft = 2,
@@ -60,7 +60,7 @@ public enum SwingHorizontalParameter {
     FullAlt = 7,
 }
 
-public enum SwingVerticalParameter {
+public enum SwingVerticalValues {
     Default = 0,
     Full = 1,
     FixedTop = 2,
@@ -75,24 +75,24 @@ public enum SwingVerticalParameter {
     SwingTop = 11,
 }
 
-public enum QuietParameter {
+public enum QuietValues {
     Off = 0,
     Mode1 = 1,
     Mode2 = 2,
     Mode3 = 3,
 }
 
-public enum TurboParameter {
+public enum TurboValues {
     Off = 0,
     On = 1,
 }
 
-public enum PowerSaveParameter {
+public enum PowerSaveValues {
     Off = 0,
     On = 1,
 }
 
-public enum SafetyHeatingParameter {
+public enum SafetyHeatingValues {
     Off = 0,
     On = 1,
 }
