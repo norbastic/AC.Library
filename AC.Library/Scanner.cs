@@ -40,12 +40,12 @@ public class Scanner
     /// <summary>
     /// Scans the local network for available AC device(s)
     /// </summary>
-    /// <param name="broadcastAddresses">Broadcast address of the network. E.g. 192.168.0.255</param>
+    /// <param name="broadcastAddress">Broadcast address of the network. E.g. 192.168.0.255</param>
     /// <returns>A list of ScannedDevice object</returns>
-    public async Task<List<ScannedDevice>> Scan(string broadcastAddresses)
+    public async Task<List<ScannedDevice>> Scan(string broadcastAddress)
     {
         var foundUnits = new List<ScannedDevice>();
-        var responses = await DiscoverLocalDevices(broadcastAddresses);
+        var responses = await DiscoverLocalDevices(broadcastAddress);
 
         foreach (var response in responses)
         {

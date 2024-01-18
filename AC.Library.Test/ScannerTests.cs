@@ -25,19 +25,8 @@ public class ScannerTests
     [Fact]
     public async void ScanSuccessful()
     {
-        var mock = new Mock<IUdpClientWrapper>();
-        mock.SetupSequence(x => x.Available)
-            .Returns(1)
-            .Returns(0);
-        mock.Setup(x => x.EnableBroadcast)
-            .Returns(true);
-        mock.Setup(x => x.ReceiveAsync())
-            .ReturnsAsync(new UdpReceiveResult(
-                Convert.FromBase64String(UdpBase64Buffer),
-                IPEndPoint.Parse($"{MockIpAddress}:7000"))
-            );
-        
-        var scanner = new Scanner(_scannerLogger, mock.Object);
+        var udpWrapper = TestSetup.CreateBroadcastMock(Convert.FromBase64String(UdpBase64Buffer), MockIpAddress);
+        var scanner = new Scanner(_scannerLogger, udpWrapper);
         var result = await scanner.Scan("192.168.1.255");
 
         Assert.Contains(result, device => device.Address == MockIpAddress);

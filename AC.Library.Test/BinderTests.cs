@@ -35,39 +35,17 @@ public class BinderTests
     [Fact]
     public async void BindSuccessful()
     {
-        var mockUdp = new Mock<IUdpClientWrapper>();
-        mockUdp.Setup(x => x.EnableBroadcast)
-            .Returns(true);
-        mockUdp.Setup(x => x.ReceiveAsync())
-            .ReturnsAsync(new UdpReceiveResult(
-                Convert.FromBase64String(ScanResultBase64),
-                IPEndPoint.Parse($"{TargetIp}:7000"))
-            );
-        mockUdp.SetupSequence(x => x.Available)
-            .Returns(1)
-            .Returns(0);
-        
+        var mockUdp = TestSetup.CreateBroadcastMock(Convert.FromBase64String(ScanResultBase64), TargetIp);
         var bytesToSend = Encoding.ASCII.GetBytes(BindCommand);
-        var mockBindUdp = new Mock<IUdpClientWrapper>();
-        mockBindUdp.Setup(x => x.EnableBroadcast)
-            .Returns(false);
-        mockBindUdp.Setup(x => x.ReceiveAsync())
-            .ReturnsAsync(new UdpReceiveResult(
-                Convert.FromBase64String(BindResultBase64),
-                IPEndPoint.Parse($"{TargetIp}:7000"))
-            );
-        mockBindUdp.Setup(x => x.SendAsync(bytesToSend, bytesToSend.Length, TargetIp, 7000))
-            .ReturnsAsync(bytesToSend.Length);
-        mockBindUdp.SetupSequence(x => x.Available)
-            .Returns(1)
-            .Returns(0);
+        var bytesToReceive = Convert.FromBase64String(BindResultBase64);
+        var mockBindUdp = TestSetup.CreateBindUdpMock(bytesToSend, bytesToReceive, TargetIp);
         
-        var scanner = new Scanner(_scannerLogger, mockUdp.Object);
+        var scanner = new Scanner(_scannerLogger, mockUdp);
         var scannedDevices = await scanner.Scan("192.168.1.255");
         Assert.True(scannedDevices.Count > 0);
         
         var toBind = scannedDevices.FirstOrDefault();
-        var binder = new Binder(_binderLogger, mockBindUdp.Object);
+        var binder = new Binder(_binderLogger, mockBindUdp);
         var receivedKey = await binder.BindOne(toBind.Id, TargetIp);
         Assert.True(!string.IsNullOrEmpty(receivedKey));
     }
