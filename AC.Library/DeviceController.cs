@@ -44,11 +44,14 @@ public class DeviceController
         var pack = CommandRequestPack.Create(_airConditionerModel.Id, param, value);
         var packJson = JsonSerializer.Serialize(pack);
         var encryptedData = Crypto.EncryptData(packJson, _airConditionerModel.PrivateKey) ?? throw new Exception("Could not encrypt pack json.");
-        
         var request = Request.Create(_airConditionerModel.Id, encryptedData);
         var bytes = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(request));
         var udpHandler = new UdpHandler(_udpClientWrapper);
         var udpResponse = (await udpHandler.SendReceiveRequest(bytes, _airConditionerModel.Address)).FirstOrDefault();
+        if (udpResponse.Buffer == null)
+        {
+            return false;
+        }
         var commandResponse = GetCommandResponsePackFromUdpResponse(udpResponse);
 
         if (commandResponse == null) {
