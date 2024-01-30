@@ -42,4 +42,23 @@ public class TestSetup
         
         return mockBindUdp.Object;
     }
+    
+    public static IUdpClientWrapper CreateSendParameterUdpWrapper(byte[] toSend, byte[] toReceive, string ipAddress)
+    {
+        var mockBindUdp = new Mock<IUdpClientWrapper>();
+        mockBindUdp.Setup(x => x.EnableBroadcast)
+            .Returns(false);
+        mockBindUdp.Setup(x => x.ReceiveAsync())
+            .ReturnsAsync(new UdpReceiveResult(
+                toReceive,
+                IPEndPoint.Parse($"{ipAddress}:7000"))
+            );
+        mockBindUdp.Setup(x => x.SendAsync(toSend, toSend.Length, ipAddress, 7000))
+            .ReturnsAsync(toSend.Length);
+        mockBindUdp.SetupSequence(x => x.Available)
+            .Returns(1)
+            .Returns(0);
+        
+        return mockBindUdp.Object;
+    }
 }
