@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AC.Library.Models;
+using AC.Library.Utils;
 using Xunit;
 
 namespace AC.Library.Test;
@@ -35,5 +36,23 @@ public class SendParameterTests
         };
         var result = await deviceController.SetDeviceParameter(parameter);
         Assert.True(result);
+    }
+    
+    [Fact]
+    public async void GetStatusTest()
+    {
+        var acDevice = new AirConditionerModel
+        {
+            Address = "192.168.1.148",
+            Name = "1ed36c75",
+            Id = "f4911ed36c75",
+            PrivateKey = "4Fg7Ij0Lm3Op6Rs9"
+        };
+        var deviceController = new DeviceController(acDevice, new UdpClientWrapper());
+        var parameter = new List<TemperatureParam>() {
+            TemperatureParam.Temperature
+        };
+        var result = await deviceController.GetDeviceStatus(parameter);
+        Assert.NotNull(result);
     }
 }
