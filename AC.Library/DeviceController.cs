@@ -68,7 +68,7 @@ public class DeviceController
 
     public async Task<string?> GetDeviceStatus<T>(List<T> columns) where T : StringEnum
     {
-        var statusRequest = new StatusReuest
+        var statusRequest = new StatusReuestPack
         {
             Type = "status",
             MAC = _airConditionerModel.Id,

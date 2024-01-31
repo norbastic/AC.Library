@@ -1,6 +1,8 @@
+using AC.Library.Interfaces;
+
 namespace AC.Library.Utils;
 
-public class StringEnum
+public class StringEnum : IParameter
 {
     public string Value { get; set; }
  
