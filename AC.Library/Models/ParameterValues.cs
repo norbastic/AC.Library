@@ -1,8 +1,19 @@
+using AC.Library.Interfaces;
+
 namespace AC.Library.Models;
 
 public enum PowerValues {
     Off = 0,
     On = 1
+}
+
+public class PowerParameterValue : IParameterValue
+{
+    private readonly PowerValues _value;
+    public PowerParameterValue(PowerValues value) {
+        _value = value;
+    }
+    public int Value => (int) _value;
 }
 
 public enum ModeValues {
@@ -11,6 +22,48 @@ public enum ModeValues {
     Dry = 2,
     Fan = 3,
     Heat = 4
+}
+
+public class ModeParameterValue : IParameterValue
+{
+    private readonly ModeValues _value;
+    public ModeParameterValue(ModeValues value) {
+        _value = value;
+    }
+    public int Value => (int) _value;
+}
+
+public enum TemperatureValues
+{
+    _16 = 16,
+    _17 = 17,
+    _18 = 18,
+    _19 = 19,
+    _20 = 20,
+    _21 = 21,
+    _22 = 22,
+    _23 = 23,
+    _24 = 24,
+    _25 = 25,
+    _26 = 26,
+    _27 = 27,
+    _28 = 28,
+    _29 = 29,
+    _30 = 30,
+    _31 = 31,
+    _32 = 32,
+    _33 = 33,
+    _34 = 34,
+    _35 = 35
+}
+
+public class TempParameterValue : IParameterValue
+{
+    private readonly TemperatureValues _value;
+    public TempParameterValue(TemperatureValues value) {
+        _value = value;
+    }
+    public int Value => (int) _value;
 }
 
 public enum TempUnitValues {

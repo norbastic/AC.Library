@@ -24,7 +24,8 @@ public abstract class DeviceCommunicationTemplate
         var request = CreateRequest();
         var encryptedData = EncryptData(request);
         var udpResponse = await SendUdpRequest(encryptedData);
-        return ProcessResponse(udpResponse);
+        var json = DecryptResponse(udpResponse);
+        return ProcessResponseJson(json);
     }
 
     private void ValidateDevice()
@@ -47,6 +48,18 @@ public abstract class DeviceCommunicationTemplate
         return (await udpHandler.SendReceiveRequest(bytes, _airConditionerModel.Address)).FirstOrDefault();
     }
 
+    private string? DecryptResponse(UdpReceiveResult udpResponse)
+    {
+        var responseJson = Encoding.ASCII.GetString(udpResponse.Buffer);
+        var response = JsonSerializer.Deserialize<ResponsePackInfo>(responseJson);
+        if (response == null)
+        {
+            return null;
+        }
+        var decryptedJson = Crypto.DecryptData(response.Pack, _airConditionerModel!.PrivateKey!);
+        return decryptedJson;
+    }
+
     protected abstract object CreateRequest();
-    protected abstract object ProcessResponse(UdpReceiveResult udpResponse);
+    protected abstract object ProcessResponseJson(string json);
 }

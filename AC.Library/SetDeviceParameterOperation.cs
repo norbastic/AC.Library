@@ -1,4 +1,4 @@
-using System.Net.Sockets;
+using System.Text.Json;
 using AC.Library.Interfaces;
 using AC.Library.Models;
 using AC.Library.Template;
@@ -6,18 +6,34 @@ using AC.Library.Template;
 namespace AC.Library;
 
 public class SetDeviceParameterOperation<TParam, TValue> : DeviceCommunicationTemplate
+    where TParam : IParameter
+    where TValue : IParameterValue
 {
-    public SetDeviceParameterOperation(AirConditionerModel airConditionerModel, IUdpClientWrapper udpClientWrapper, IParameter parameter) : base(airConditionerModel, udpClientWrapper)
+    private TParam _param;
+    private TValue _value;
+
+    public SetDeviceParameterOperation(
+        AirConditionerModel airConditionerModel,
+        IUdpClientWrapper udpClientWrapper,
+        TParam param,
+        TValue value)
+        : base(airConditionerModel, udpClientWrapper)
     {
+        _param = param;
+        _value = value;
     }
 
     protected override object CreateRequest()
     {
-        throw new NotImplementedException();
+        return CommandRequestPack.Create(_airConditionerModel.Id, _param.Value, _value.Value);
     }
 
-    protected override object ProcessResponse(UdpReceiveResult udpResponse)
+    protected override object ProcessResponseJson(string json)
     {
-        throw new NotImplementedException();
+        var setParameterResponse = JsonSerializer.Deserialize<CommandResponsePack>(json);
+        if (setParameterResponse == null) {
+            return false;
+        }
+        return _param.Value.Equals(setParameterResponse.Columns.First());
     }
 }
