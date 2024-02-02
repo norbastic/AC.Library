@@ -71,6 +71,15 @@ public enum TempUnitValues {
     Fahrenheit = 1
 }
 
+public class TempUnitParameterValue : IParameterValue
+{
+    private readonly TempUnitValues _value;
+    public TempUnitParameterValue(TempUnitValues value) {
+        _value = value;
+    }
+    public int Value => (int) _value;
+}
+
 public enum FanSpeedValues {
     Auto = 0,
     Low = 1,
@@ -80,6 +89,15 @@ public enum FanSpeedValues {
     High = 5
 }
 
+public class FanSpeedParameterValue : IParameterValue
+{
+    private readonly FanSpeedValues _value;
+    public FanSpeedParameterValue(FanSpeedValues value) {
+        _value = value;
+    }
+    public int Value => (int) _value;
+}
+
 public enum AirValues {
     Off = 0,
     Inside = 1,
@@ -87,9 +105,27 @@ public enum AirValues {
     Mode3 = 3
 }
 
+public class AirParameterValue : IParameterValue
+{
+    private readonly AirValues _value;
+    public AirParameterValue(AirValues value) {
+        _value = value;
+    }
+    public int Value => (int) _value;
+}
+
 public enum HealthValues {
     Off = 0,
     On = 1,
+}
+
+public class HealthParameterValue : IParameterValue
+{
+    private readonly HealthValues _value;
+    public HealthParameterValue(HealthValues value) {
+        _value = value;
+    }
+    public int Value => (int) _value;
 }
 
 public enum SleepValues {
@@ -97,9 +133,27 @@ public enum SleepValues {
     On = 1,
 }
 
-public enum LightsValues {
+public class SleepParameterValue : IParameterValue
+{
+    private readonly SleepValues _value;
+    public SleepParameterValue(SleepValues value) {
+        _value = value;
+    }
+    public int Value => (int) _value;
+}
+
+public enum LightValues {
     Off = 0,
     On = 1,
+}
+
+public class LightParameterValue : IParameterValue
+{
+    private readonly LightValues _value;
+    public LightParameterValue(LightValues value) {
+        _value = value;
+    }
+    public int Value => (int) _value;
 }
 
 public enum SwingHorizontalValues {
@@ -111,6 +165,15 @@ public enum SwingHorizontalValues {
     FixedMidRight = 5,
     FixedRight = 6,
     FullAlt = 7,
+}
+
+public class SwingHorizontalParameterValue : IParameterValue
+{
+    private readonly SwingHorizontalValues _value;
+    public SwingHorizontalParameterValue(SwingHorizontalValues value) {
+        _value = value;
+    }
+    public int Value => (int) _value;
 }
 
 public enum SwingVerticalValues {
@@ -128,6 +191,16 @@ public enum SwingVerticalValues {
     SwingTop = 11,
 }
 
+public class SwingVerticalParameterValue : IParameterValue
+{
+    private readonly SwingVerticalValues _value;
+    public SwingVerticalParameterValue(SwingVerticalValues value)
+    {
+        _value = value;
+    }
+    public int Value => (int)_value;
+}
+
 public enum QuietValues {
     Off = 0,
     Mode1 = 1,
@@ -135,9 +208,29 @@ public enum QuietValues {
     Mode3 = 3,
 }
 
+public class QuietParameterValue : IParameterValue
+{
+    private readonly QuietValues _value;
+    public QuietParameterValue(QuietValues value)
+    {
+        _value = value;
+    }
+    public int Value => (int)_value;
+}
+
 public enum TurboValues {
     Off = 0,
     On = 1,
+}
+
+public class TurboParameterValue : IParameterValue
+{
+    private readonly TurboValues _value;
+    public TurboParameterValue(TurboValues value)
+    {
+        _value = value;
+    }
+    public int Value => (int)_value;
 }
 
 public enum PowerSaveValues {
@@ -145,7 +238,27 @@ public enum PowerSaveValues {
     On = 1,
 }
 
+public class PowerSaveParameterValue : IParameterValue
+{
+    private readonly PowerSaveValues _value;
+    public PowerSaveParameterValue(PowerSaveValues value)
+    {
+        _value = value;
+    }
+    public int Value => (int)_value;
+}
+
 public enum SafetyHeatingValues {
     Off = 0,
     On = 1,
+}
+
+public class SafetyHeatingParameterValue : IParameterValue
+{
+    private readonly SafetyHeatingValues _value;
+    public SafetyHeatingParameterValue(SafetyHeatingValues value)
+    {
+        _value = value;
+    }
+    public int Value => (int)_value;
 }
