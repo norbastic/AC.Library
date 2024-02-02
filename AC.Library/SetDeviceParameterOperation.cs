@@ -29,12 +29,13 @@ public class SetDeviceParameterOperation<TParam, TValue> : DeviceCommunicationTe
         return CommandRequestPack.Create(_airConditionerModel.Id, _param.Value, _value.Value);
     }
 
-    protected override object ProcessResponseJson(string json)
+    protected override string ProcessResponseJson(string json)
     {
         var setParameterResponse = JsonSerializer.Deserialize<CommandResponsePack>(json);
         if (setParameterResponse == null) {
-            return false;
+            return null;
         }
-        return _param.Value.Equals(setParameterResponse.Columns.First());
+
+        return _param.Value.Equals(setParameterResponse.Columns.First()) ? setParameterResponse.Columns.First() : null;
     }
 }

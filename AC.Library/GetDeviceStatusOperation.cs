@@ -26,7 +26,7 @@ public class GetDeviceStatusOperation<T> : DeviceCommunicationTemplate where T :
         };
     }
 
-    protected override object ProcessResponseJson(string json)
+    protected override StatusResponsePack ProcessResponseJson(string json)
     {
         return JsonSerializer.Deserialize<StatusResponsePack>(json);
     }

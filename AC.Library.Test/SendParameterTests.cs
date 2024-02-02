@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AC.Library.Interfaces;
 using AC.Library.Models;
+using AC.Library.Models.Communication;
 using AC.Library.Utils;
 using Xunit;
 
@@ -37,8 +38,8 @@ public class SendParameterTests
             TemperatureParam.Temperature,
             new TempParameterValue(TemperatureValues._20));
 
-        var result = (bool) await deviceSetter.ExecuteOperationAsync();
-        Assert.True(result);
+        var result = (string) await deviceSetter.ExecuteOperationAsync();
+        Assert.Equal(TemperatureParam.Temperature.Value, result);
     }
     
     [Fact]
@@ -57,7 +58,7 @@ public class SendParameterTests
             TemperatureParam.Temperature
         };
         var statusGetter = new GetDeviceStatusOperation<IParameter>(acDevice, new UdpClientWrapper(), toQuery);
-        var result = await statusGetter.ExecuteOperationAsync();
-        Assert.NotNull(result);
+        var result = (StatusResponsePack) await statusGetter.ExecuteOperationAsync();
+        Assert.True(result.Columns.Length == 2);
     }
 }
