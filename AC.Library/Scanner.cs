@@ -1,4 +1,6 @@
-﻿namespace AC.Library;
+﻿using AC.Library.Models.Communication;
+
+namespace AC.Library;
 
 using System.Collections.Generic;
 using System.Text;

@@ -1,4 +1,5 @@
 using AC.Library.Models;
+using AC.Library.Models.Communication;
 
 namespace AC.Library.Utils;
 

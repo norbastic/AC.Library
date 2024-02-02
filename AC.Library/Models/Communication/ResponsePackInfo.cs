@@ -1,6 +1,6 @@
-namespace AC.Library.Models;
-
 using System.Text.Json.Serialization;
+
+namespace AC.Library.Models.Communication;
 
 internal class PackInfo
 {

@@ -1,6 +1,7 @@
 using System.Text.Json;
 using AC.Library.Interfaces;
 using AC.Library.Models;
+using AC.Library.Models.Communication;
 using AC.Library.Template;
 
 namespace AC.Library;

@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using AC.Library.Interfaces;
 using AC.Library.Models;
+using AC.Library.Models.Communication;
 using AC.Library.Utils;
 
 namespace AC.Library.Template;

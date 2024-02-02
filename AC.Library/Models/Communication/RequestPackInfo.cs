@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AC.Library.Models;
+namespace AC.Library.Models.Communication;
 
 internal class RequestPackInfo
 {

@@ -4,6 +4,7 @@ using AC.Library.Utils;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using AC.Library.Models.Communication;
 
 namespace AC.Library;
 
@@ -68,7 +69,7 @@ public class DeviceController
 
     public async Task<string?> GetDeviceStatus<T>(List<T> columns) where T : StringEnum
     {
-        var statusRequest = new StatusReuestPack
+        var statusRequest = new StatusRequestPack
         {
             Type = "status",
             MAC = _airConditionerModel.Id,

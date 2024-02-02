@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace AC.Library.Models;
+namespace AC.Library.Models.Communication;
 
-public class StatusReuestPack
+public class StatusRequestPack
 {
     [JsonPropertyName("t")]
     public string Type { get; set; } = string.Empty;

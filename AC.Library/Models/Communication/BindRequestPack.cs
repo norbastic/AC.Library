@@ -1,6 +1,7 @@
-namespace AC.Library.Models;
-
 using System.Text.Json.Serialization;
+
+namespace AC.Library.Models.Communication;
+
 public class BindRequestPack
 {
     [JsonPropertyName("t")]

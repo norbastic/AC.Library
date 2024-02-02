@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using AC.Library.Interfaces;
 using AC.Library.Models;
+using AC.Library.Utils;
 using Xunit;
 
 namespace AC.Library.Test;
@@ -48,6 +51,13 @@ public class SendParameterTests
             Id = "f4911ed36c75",
             PrivateKey = "4Fg7Ij0Lm3Op6Rs9"
         };
-        // TODO: DeviceStatusGetter
+        var toQuery = new List<IParameter>()
+        {
+            PowerParam.Power,
+            TemperatureParam.Temperature
+        };
+        var statusGetter = new GetDeviceStatusOperation<IParameter>(acDevice, new UdpClientWrapper(), toQuery);
+        var result = await statusGetter.ExecuteOperationAsync();
+        Assert.NotNull(result);
     }
 }

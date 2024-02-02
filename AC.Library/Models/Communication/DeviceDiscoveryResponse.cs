@@ -1,4 +1,4 @@
-namespace AC.Library.Models;
+namespace AC.Library.Models.Communication;
 
 internal class DeviceDiscoveryResponse
 {
